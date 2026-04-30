@@ -23,13 +23,13 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
     - name: Restore Dependencies
-      run: dotnet restore Azure_LoginApp-main/LoginApp.csproj
+      run: dotnet restore Azure-LoginApp-main/LoginApp.csproj
 
     - name: Build
-      run: dotnet build Azure_LoginApp-main/LoginApp.csproj --configuration Release --no-restore
+      run: dotnet build Azure-LoginApp-main/LoginApp.csproj --configuration Release --no-restore
 
     - name: Publish
-      run: dotnet publish Azure_LoginApp-main/LoginApp.csproj -c Release -o ./publish
+      run: dotnet publish Azure-LoginApp-main/LoginApp.csproj -c Release -o ./publish
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
