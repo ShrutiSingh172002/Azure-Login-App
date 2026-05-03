@@ -1,3 +1,4 @@
+```yaml id="h7p4v9"
 name: Build and Deploy .NET App to Azure
 
 on:
@@ -6,7 +7,7 @@ on:
       - main
 
 env:
-  AZURE_WEBAPP_NAME: AzureLogin   # ✅ Your actual App Service name
+  AZURE_WEBAPP_NAME: AzureLogin
   DOTNET_VERSION: '8.0.x'
 
 jobs:
@@ -31,9 +32,13 @@ jobs:
     - name: Publish
       run: dotnet publish Azure-LoginApp-main/LoginApp.csproj -c Release -o ./publish
 
+    - name: Verify Publish Output
+      run: ls -la ./publish
+
     - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v2
+      uses: azure/webapps-deploy@v3
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: ./publish
+```
