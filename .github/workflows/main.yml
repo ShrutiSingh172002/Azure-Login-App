@@ -1,0 +1,43 @@
+name: Build and Deploy .NET App to Azure
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AZURE_WEBAPP_NAME: AzureLogin2
+  DOTNET_VERSION: '8.0.x'
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore Dependencies
+      run: dotnet restore Azure-LoginApp-main/LoginApp.csproj
+
+    - name: Build
+      run: dotnet build Azure-LoginApp-main/LoginApp.csproj --configuration Release --no-restore
+
+    - name: Publish
+      run: dotnet publish Azure-LoginApp-main/LoginApp.csproj -c Release -o ./publish
+
+    - name: Verify Publish Output
+      run: ls -la ./publish
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: AzureLogin2
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ./publish
+
